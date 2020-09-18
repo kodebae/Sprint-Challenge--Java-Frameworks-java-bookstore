@@ -10,6 +10,8 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+
+//Already done
 /**
  * Class to override the error details provided by Spring Boot. We want to use our own format.
  */
@@ -52,3 +54,5 @@ public class CustomErrorDetails
         return errorDetails;
     }
 }
+// This class uses the helperFunctions class. This class contains helpful methods that are used throughout
+// the application

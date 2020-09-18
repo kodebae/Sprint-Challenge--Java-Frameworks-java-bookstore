@@ -97,6 +97,8 @@ public class ErrorDetail
         return detail;
     }
 
+    //Already Created for us
+
     /**
      * Setter for error details
      *

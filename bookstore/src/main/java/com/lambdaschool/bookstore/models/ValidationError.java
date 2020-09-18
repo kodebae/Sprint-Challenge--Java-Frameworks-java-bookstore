@@ -1,5 +1,7 @@
 package com.lambdaschool.bookstore.models;
 
+//Already Created for us
+
 /**
  * A model to report a validation error
  */
