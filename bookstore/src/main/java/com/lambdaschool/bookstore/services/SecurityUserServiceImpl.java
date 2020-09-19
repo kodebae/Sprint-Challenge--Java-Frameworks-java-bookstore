@@ -47,4 +47,5 @@ public class SecurityUserServiceImpl
                                                                       user.getPassword(),
                                                                       user.getAuthority());
     }
+
 }

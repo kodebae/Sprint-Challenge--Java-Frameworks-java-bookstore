@@ -160,29 +160,29 @@ public class SeedData
         s4 = sectionService.save(s4);
         s5 = sectionService.save(s5);
 
-        Book b1 = new Book("Flatterland", "9780738206752", 2001, s1);
+        Book b1 = new Book("Test Flatterland", "9780738206752", 2001, s1);
         b1.getWrotes()
                 .add(new Wrote(a6, new Book()));
         b1 = bookService.save(b1);
 
-        Book b2 = new Book("Digital Fortess", "9788489367012", 2007, s1);
+        Book b2 = new Book("Test Digital Fortess", "9788489367012", 2007, s1);
         b2.getWrotes()
                 .add(new Wrote(a2, new Book()));
         b2 = bookService.save(b2);
 
-        Book b3 = new Book("The Da Vinci Code", "9780307474278", 2009, s1);
+        Book b3 = new Book("Test The Da Vinci Code", "9780307474278", 2009, s1);
         b3.getWrotes()
                 .add(new Wrote(a2, new Book()));
         b3 = bookService.save(b3);
 
-        Book b4 = new Book("Essentials of Finance", "1314241651234", 0, s4);
+        Book b4 = new Book("Test Essentials of Finance", "1314241651234", 0, s4);
         b4.getWrotes()
                 .add(new Wrote(a3, new Book()));
         b4.getWrotes()
                 .add(new Wrote(a5, new Book()));
         b4 = bookService.save(b4);
 
-        Book b5 = new Book("Calling Texas Home", "1885171382134", 2000, s3);
+        Book b5 = new Book("Test Calling Texas Home", "1885171382134", 2000, s3);
         b5.getWrotes()
                 .add(new Wrote(a4, new Book()));
         b5 = bookService.save(b5);
