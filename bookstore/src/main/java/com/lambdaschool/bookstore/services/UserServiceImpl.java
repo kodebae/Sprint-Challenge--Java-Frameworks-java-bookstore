@@ -95,7 +95,7 @@ public class UserServiceImpl
 
         newUser.setUsername(user.getUsername()
                                     .toLowerCase());
-        newUser.setPasswordNoEncrypt(user.getPassword());
+        newUser.setNoEncodePassword(user.getPassword());
         newUser.setPrimaryemail(user.getPrimaryemail()
                                         .toLowerCase());
 
@@ -137,7 +137,7 @@ public class UserServiceImpl
 
         if (user.getPassword() != null)
         {
-            currentUser.setPasswordNoEncrypt(user.getPassword());
+            currentUser.setNoEncodePassword(user.getPassword());
         }
 
         if (user.getPrimaryemail() != null)
