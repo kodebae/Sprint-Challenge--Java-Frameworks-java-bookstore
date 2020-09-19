@@ -42,13 +42,12 @@ import java.util.Date;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 public class RestExceptionHandler
-        extends ResponseEntityExceptionHandler
-{
+        extends ResponseEntityExceptionHandler {
     /**
      * Connects this class with the Helper Functions
      */
     @Autowired
-    private HelperFunctions helperFunctions;
+    HelperFunctions helperFunctions;
 
     /**
      * The constructor for the RestExceptionHandler. Currently we do not do anything special. We just call the parent constructor.

@@ -13,20 +13,21 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 // Authorization - always clients to access - username / password => client id / client secret
 // Authentication - users - username / password. Restrict Resources
 // Access Token - identifies the user
-//
 // Authorization - Server
 // Security Config - password encryption, toke location, authorization - authentication
 // ResourceServer - who has access to what - change the most
+
+
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter
 {
-    static final String CLIENT_ID = System.getenv("OAUTHCLIENTID");
-    static final String CLIENT_SECRET = System.getenv("OAUTHCLIENTSECRET");
+    static final String CLIENT_ID = System.getenv("OAUTHCLIENTID"); // environment variable
+    static final String CLIENT_SECRET = System.getenv("OAUTHCLIENTSECRET"); // the password
     static final String GRANT_TYPE_PASSWORD = "password";
-    static final String AUTHORIZATION_CODE = "authorization_code";
-    static final String SCOPE_WRITE = "write";
-    static final String SCOPE_READ = "read";
+    static final String AUTHORIZATION_CODE = "authorization_code"; // sends our API token
+    static final String SCOPE_WRITE = "write"; // not going over scope in this class
+    static final String SCOPE_READ = "read"; // scope not discussed
     static final String TRUST = "trust";
     static final int ACCESS_TOKEN_VALIDITY_SECONDS = -1;
 

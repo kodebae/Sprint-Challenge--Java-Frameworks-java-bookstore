@@ -23,7 +23,7 @@ public class CustomErrorDetails
      * Connects this class with the Helper Functions
      */
     @Autowired
-    private HelperFunctions helperFunctions;
+    HelperFunctions helperFunctions;
 
     /**
      * Custom method to override the error details provided by Spring Boot. We want to use our own format.
@@ -48,11 +48,11 @@ public class CustomErrorDetails
         errorDetails.put("status", errorAttributes.get("status"));
         errorDetails.put("detail", errorAttributes.get("message"));
         errorDetails.put("timestamp", errorAttributes.get("timestamp"));
-        errorDetails.put("developerMessage", "path: " + errorAttributes.get("path"));
+        errorDetails.put("developerMessage", "path: " + errorAttributes.get("path")); // tells us where the error is coming from
 
-        errorDetails.put("errors", helperFunctions.getConstraintViolation(this.getError(webRequest)));
+        errorDetails.put("errors", helperFunctions.getConstraintViolation(this.getError(webRequest))); // our list of validation errors, tells the client exactly what the errors are
         return errorDetails;
     }
 }
 // This class uses the helperFunctions class. This class contains helpful methods that are used throughout
-// the application
+// the application.

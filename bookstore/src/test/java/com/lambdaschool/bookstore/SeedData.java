@@ -1,18 +1,7 @@
 package com.lambdaschool.bookstore;
 
-import com.lambdaschool.bookstore.models.Author;
-import com.lambdaschool.bookstore.models.Book;
-import com.lambdaschool.bookstore.models.Role;
-import com.lambdaschool.bookstore.models.Section;
-import com.lambdaschool.bookstore.models.User;
-import com.lambdaschool.bookstore.models.UserRoles;
-import com.lambdaschool.bookstore.models.Useremail;
-import com.lambdaschool.bookstore.models.Wrote;
-import com.lambdaschool.bookstore.services.AuthorService;
-import com.lambdaschool.bookstore.services.BookService;
-import com.lambdaschool.bookstore.services.RoleService;
-import com.lambdaschool.bookstore.services.SectionService;
-import com.lambdaschool.bookstore.services.UserService;
+import com.lambdaschool.bookstore.models.*;
+import com.lambdaschool.bookstore.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

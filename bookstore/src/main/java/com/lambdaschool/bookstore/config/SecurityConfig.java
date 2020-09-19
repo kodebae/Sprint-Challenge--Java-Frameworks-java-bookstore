@@ -1,6 +1,6 @@
 package com.lambdaschool.bookstore.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import  org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 @Configuration
 @EnableWebSecurity
 // This allows us to further restrict access to an endpoint inside of a controller.
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true) // attaches to resource server
 public class SecurityConfig
         extends WebSecurityConfigurerAdapter
 {
@@ -45,7 +45,7 @@ public class SecurityConfig
     /**
      * Connects the user details used by Spring Security to our implementation of it
      */
-    @Resource(name = "securityUserService")
+    @Resource(name = "securityUserService") // connects to the user model
     private UserDetailsService userDetailsService;
 
     /**
@@ -55,7 +55,7 @@ public class SecurityConfig
      * @throws Exception in case our custom configuration does not work
      */
     @Autowired
-    public void globalUserDetails(AuthenticationManagerBuilder auth)
+    public void globalUserDetails(AuthenticationManagerBuilder auth) //connects security to authentication server
             throws
             Exception
     {

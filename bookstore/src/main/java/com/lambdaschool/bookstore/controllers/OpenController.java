@@ -1,132 +1,143 @@
 package com.lambdaschool.bookstore.controllers;
 
-
+import com.lambdaschool.bookstore.models.User;
+import com.lambdaschool.bookstore.models.UserMinimum;
+import com.lambdaschool.bookstore.models.UserRoles;
+import com.lambdaschool.bookstore.services.RoleService;
+import com.lambdaschool.bookstore.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
- * This class enables and configures the Authorization Server. The class is also responsible for granting authorization to the client.
- * This class is responsible for generating and maintaining the access tokens.
+ * The class allows access to endpoints that are open to all users regardless of authentication status.
+ * Its most important function is to allow a person to create their own username
  */
-@Configuration
-@EnableAuthorizationServer
-class AuthorizationServerConfig
-        extends AuthorizationServerConfigurerAdapter
+@RestController
+public class OpenController
 {
     /**
-     * Client Id is the user name for the client application. It is read from the environment variable OAUTHCLIENTID
-     */
-    static final String CLIENT_ID = System.getenv("OAUTHCLIENTID");
-
-    /**
-     * Client secret is the password for the client application. It is read from the environment variable OAUTHCLIENTSECRET
-     */
-    static final String CLIENT_SECRET = System.getenv("OAUTHCLIENTSECRET"); // read from environment variable
-
-    /**
-     * We are using username and password to authenticate a user
-     */
-    static final String GRANT_TYPE_PASSWORD = "password";
-
-    /**
-     * We are using the client id and client security combination to authorize the client.
-     * The client id and security can be base64 encoded into a single API key or code
-     */
-    static final String AUTHORIZATION_CODE = "authorization_code";
-
-    /**
-     * Scopes are meant to limit what a user can do with the application as a whole.
-     * Here we allow the user to read from the application.
-     * Currently we are not implementing scope in our applications. We are just setting up the framework to do so.
-     */
-    static final String SCOPE_READ = "read";
-
-    /**
-     * Scopes are meant to limit what a user can do with the application as a whole.
-     * Here we allow the user to write to the application.
-     * Currently we are not implementing scope in our applications. We are just setting up the framework to do so.
-     */
-    static final String SCOPE_WRITE = "write";
-
-    /**
-     * Scopes are meant to limit what a user can do with the application as a whole.
-     * Here we say the user is trusted.
-     * Currently we are not implementing scope in our applications. We are just setting up the framework to do so.
-     */
-    static final String TRUST = "trust";
-
-    /**
-     * Tells how long in seconds the access code should be kept valid. After this timeout, the user has to sign on again.
-     * set to -1 if you want the token to be valid forever. 1 * 60 * 60 would give us 1 hour.
-     */
-    static final int ACCESS_TOKEN_VALIDITY_SECONDS = -1;
-
-    /**
-     * The token store is configured in Security Config. However, the authorization server manages it
+     * A method in this controller adds a new user to the application so needs access to User Services to do this.
      */
     @Autowired
-    private TokenStore tokenStore;
+    private UserService userService;
 
     /**
-     * The authentication server authenticates a user to that user user gets assigned an access token that is managed by the authorization server
+     * A method in this controller adds a new user to the application with the role User so needs access to Role Services to do this.
      */
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private RoleService roleService;
 
     /**
-     * The authorization server must encrypt the client secret so needs to know what password encoder is in use.
-     */
-    @Autowired
-    private PasswordEncoder encoder;
-
-    /**
-     * Method to configure the Client Details Service for our application. This is created and managed by Spring.
-     * We just need to give it our custom configuration.
+     * This endpoint always anyone to create an account with the default role of USER. That role is hardcoded in this method.
      *
-     * @param configurer The ClientDetailsServiceConfigurer used in our application. Spring Boot Security created this for us.
-     *                   We just use it.
-     * @throws Exception if the configuration fails
+     * @param httpServletRequest the request that comes in for creating the new user
+     * @param newminuser         A special minimum set of data that is needed to create a new user
+     * @return The token access and other relevent data to token access. Status of CREATED. The location header to look up the new user.
+     * @throws URISyntaxException we create some URIs during this method. If anything goes wrong with that creation, an exception is thrown.
      */
-    @Override
-    public void configure(ClientDetailsServiceConfigurer configurer)
+    @PostMapping(value = "/createnewuser",
+            consumes = {"application/json"},
+            produces = {"application/json"})
+    public ResponseEntity<?> addSelf(
+            HttpServletRequest httpServletRequest,
+            @Valid
+            @RequestBody
+                    UserMinimum newminuser)
             throws
-            Exception
+            URISyntaxException
     {
-        configurer.inMemory()
-                .withClient(CLIENT_ID)
-                .secret(encoder.encode(CLIENT_SECRET))
-                .authorizedGrantTypes(GRANT_TYPE_PASSWORD,
-                        AUTHORIZATION_CODE)
-                .scopes(SCOPE_READ,
-                        SCOPE_WRITE,
-                        TRUST)
-                .accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS);
+        // Create the user
+        User newuser = new User();
+
+        newuser.setUsername(newminuser.getUsername());
+        newuser.setPassword(newminuser.getPassword());
+        newuser.setPrimaryemail(newminuser.getPrimaryemail());
+
+        // add the default role of user
+        Set<UserRoles> newRoles = new HashSet<>();
+        newRoles.add(new UserRoles(newuser,
+                roleService.findByName("user")));
+        newuser.setRoles(newRoles);
+
+        newuser = userService.save(newuser);
+
+        // set the location header for the newly created resource
+        // The location comes from a different controller!
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
+                .buildAndExpand(newuser.getUserid())
+                .toUri();
+        responseHeaders.setLocation(newUserURI);
+
+        // return the access token
+        // To get the access token, surf to the endpoint /login just as if a client had done this.
+        // You cannot use a port when on Heroku
+        RestTemplate restTemplate = new RestTemplate();
+        String port = "";
+        if (httpServletRequest.getServerName()
+                .equalsIgnoreCase("localhost"))
+        {
+            port = ":" + httpServletRequest.getLocalPort();
+        }
+        String requestURI = "http://" + httpServletRequest.getServerName() + port + "/login";
+
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
+        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setAccept(acceptableMediaTypes);
+        headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
+                System.getenv("OAUTHCLIENTSECRET"));
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("grant_type",
+                "password");
+        map.add("scope",
+                "read write trust");
+        map.add("username",
+                newminuser.getUsername());
+        map.add("password",
+                newminuser.getPassword());
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
+                headers);
+
+        String theToken = restTemplate.postForObject(requestURI,
+                request,
+                String.class);
+
+        return new ResponseEntity<>(theToken,
+                responseHeaders,
+                HttpStatus.CREATED);
     }
 
     /**
-     * Connects are endpoints to our custom authentication server and token store.
-     * We can also rename the endpoints for certain oauth functions
-     *
-     * @param endpoints The Authorization Server Endpoints Configurer is created and managed by Spring Boot Security.
-     *                  We give the configurer some custom configuration and let it work!
-     * @throws Exception if the configuration fails
+     * Prevents no favicon.ico warning from appearing in the logs. @ApiIgnore tells Swagger to ignore documenting this as an endpoint.
      */
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints)
-            throws
-            Exception
+    @ApiIgnore
+    @GetMapping("favicon.ico")
+    public void returnNoFavicon()
     {
-        endpoints.tokenStore(tokenStore)
-                .authenticationManager(authenticationManager);
-        // here instead of our clients requesting authentication at the endpoint /oauth/token, they request it at the endpoint /login
-        endpoints.pathMapping("/oauth/token",
-                "/login");
+
     }
+
 }

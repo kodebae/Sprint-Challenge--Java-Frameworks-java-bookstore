@@ -10,12 +10,16 @@ public class ValidationError
     /**
      * The code (String) for the validation error
      */
-    private String Code;
+    private String Code; // what caused our problem?
 
     /**
      * The message (String) fro the validation error
      */
-    private String message;
+    private String message; // explains what the problem is
+
+//    public class ValidationError {
+//
+//    }
 
     /**
      * Getter for the code
