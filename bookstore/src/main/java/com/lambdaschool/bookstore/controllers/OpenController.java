@@ -90,11 +90,11 @@ public class OpenController
         // return the access token
         // To get the access token, surf to the endpoint /login just as if a client had done this.
         // You cannot use a port when on Heroku
+
         RestTemplate restTemplate = new RestTemplate();
         String port = "";
         if (httpServletRequest.getServerName()
-                .equalsIgnoreCase("localhost"))
-        {
+                .equalsIgnoreCase("localhost")) {
             port = ":" + httpServletRequest.getLocalPort();
         }
         String requestURI = "http://" + httpServletRequest.getServerName() + port + "/login";

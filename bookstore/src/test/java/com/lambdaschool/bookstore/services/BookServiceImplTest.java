@@ -16,6 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 //**********
 // Note security is handled at the controller, hence we do not need to worry about security here!
 //**********
+
+
 public class BookServiceImplTest
 {
 
@@ -23,8 +25,10 @@ public class BookServiceImplTest
     private BookService bookService;
 
     @Before
-    public void setUp() throws
-            Exception
+    public void setUp() throws Exception {
+
+    }
+
     {
         MockitoAnnotations.initMocks(this);
     }
