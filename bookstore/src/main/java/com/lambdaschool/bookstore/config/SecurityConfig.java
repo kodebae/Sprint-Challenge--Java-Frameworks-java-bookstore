@@ -83,6 +83,7 @@ public class SecurityConfig
     @Bean
     public PasswordEncoder encoder()
     {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(); // also used in Node.js projects
+
     }
 }

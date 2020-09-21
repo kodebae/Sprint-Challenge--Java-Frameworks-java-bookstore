@@ -48,17 +48,17 @@ public class ResourceServerConfig
                              "/swagger-resources/**",
                              "/swagger-resource/**",
                              "/swagger-ui.html",
-                             "/v2/api-docs",
+                             "/v2/api-docs", // auto include documentation for the API
                              "/webjars/**",
-                             "/createnewuser")
+                             "/createnewuser")// a way for users to self register / create a new user
                 .permitAll()
-                .antMatchers("/users/**",
+                .antMatchers("/users/**", // routes that can be navigated to
                              "/useremails/**",
                              "/oauth/revoke-token",
                              "/logout")
-                .authenticated()
+                .authenticated() // everyone who has an access token can access these routes
                 .antMatchers("/roles/**")
-                .hasAnyRole("ADMIN", "DATA")
+                .hasAnyRole("ADMIN", "DATA")// only ADMINS can delete people
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(new OAuth2AccessDeniedHandler());

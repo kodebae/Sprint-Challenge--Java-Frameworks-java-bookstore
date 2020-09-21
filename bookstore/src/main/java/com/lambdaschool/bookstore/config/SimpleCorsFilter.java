@@ -11,9 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Spring uses filters to manage web traffic. Here we manually add a CORS (Cross-Origin Resource Sharing) filter to the chain.
+ * Spring uses filters to manage web traffic. Here we manually add a CORS (Cross-Origin Resource Sharing) filter
+ * to the chain.
  * Using the Order annotation, we tell Spring this is the most important filter. If this filter blocks a request,
  * don't do anything else. Just block the request.
+ *
+ * This class allows other hosts to access our system and should be added to all databases. This is boiler plate code.
+ * The "*" that are seen below means that we are allowing full access to that element, which is default. By changing
+ * that "*" to a link we can then restrict access.
  */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)

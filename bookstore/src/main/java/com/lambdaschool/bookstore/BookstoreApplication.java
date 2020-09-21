@@ -32,7 +32,7 @@ public class BookstoreApplication
      */
     private static void checkEnvironmentVariable(String envvar)
     {
-        if (System.getenv(envvar) == null)
+        if (System.getenv(envvar) == null) // checks to see id the environment exists. If the environment exists it will run, if not it will start up then stop running.
         {
             stop = true;
         }
@@ -49,11 +49,12 @@ public class BookstoreApplication
         checkEnvironmentVariable("OAUTHCLIENTID");
         checkEnvironmentVariable("OAUTHCLIENTSECRET");
 
-        if (!stop)
-        {
+        if (!stop) {
             // so run the application!
             SpringApplication.run(BookstoreApplication.class,
                                   args);
+        }    else {
+            System.out.println("Environment variable NOT set");
         }
     }
 }

@@ -97,8 +97,8 @@ public class OpenController
                 .equalsIgnoreCase("localhost")) {
             port = ":" + httpServletRequest.getLocalPort();
         }
-        String requestURI = "http://" + httpServletRequest.getServerName() + port + "/login";
-
+        //String requestURI = "http://" + httpServletRequest.getServerName() + port + "/login";
+        String requestURI = "http://" + httpServletRequest.getServerName() + (httpServletRequest.getServerName().equalsIgnoreCase("localhost") ? ":" + httpServletRequest.getLocalPort() : "") + "/login";
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
 
