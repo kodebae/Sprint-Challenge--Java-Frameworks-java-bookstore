@@ -57,7 +57,7 @@ public class ResourceServerConfig
                              "/oauth/revoke-token",
                              "/logout")
                 .authenticated() // everyone who has an access token can access these routes
-                .antMatchers("/roles/**", "/books/book", "/books/book/**")
+                .antMatchers("/roles/**", "/books/**")
                 .hasAnyRole("ADMIN", "DATA")// only ADMINS can delete people
                 .and()
                 .exceptionHandling()
